@@ -13,6 +13,7 @@ namespace EA
         {
             BitArray genotype = new BitArray(100);
             string aidsniels = "AidsNiels";
+            string rogierlul = "klein";
            
         }
     }
