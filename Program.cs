@@ -12,25 +12,35 @@ namespace EA
         static void Main(string[] args)
         {
             Random rng = new Random();
-            List<BitArray> pop = initPop(1000, rng);
+
+
+            Dictionary<int, int> mapping = createdMapping(100, rng);
+
+            List<BitArray> pop = initPop(10, rng);
+            //List<BitArray> offSpring = createOffspring(pop,Fun1);
             //pop.ForEach(x => print(x));
             //Console.WriteLine("scrabmebemllb");
             //pop = scramble(pop, rng);
             //pop.ForEach(x => print(x));
+            Function f = new Function1();
+            Console.WriteLine(f.Evaluate(pop.First()));
+            Console.ReadLine();
 
             pop.ForEach(geno =>
             {
                 print(geno);
-                Console.WriteLine(Fun1(geno));
-
-                Console.WriteLine(Fun2(geno));
-
-                Console.WriteLine(Fun3(geno));
-
-                Console.WriteLine(Fun4(geno));
                 Console.WriteLine();
             });
             Console.ReadLine();
+        }
+
+        private static List<BitArray> createOffspring(List<BitArray> pop,Random rng, Function f)
+        {
+            //pop = scramble(pop,rng);
+            //for (int i = 0; i < pop.Count; i = i+2)
+            //{
+            //    Tuple<BitArray, BitArray> children;
+            throw new NotImplementedException();
         }
 
         private static void print(BitArray genotype)
@@ -67,57 +77,7 @@ namespace EA
         }
 
         //asssume parents have smae lnegeht else fukc youself
-        static Tuple<BitArray, BitArray> twoCut(BitArray parent1, BitArray parent2, Random rng)
-        {
-            BitArray child1 = new BitArray(parent1.Count);
-            BitArray child2 = new BitArray(parent1.Count);
-            int rInt1 = rng.Next(parent1.Count);
-            int rInt2 = rng.Next(parent1.Count);
-            int low = rInt1 < rInt2 ? rInt1 : rInt2;
-            int high = rInt1 < rInt2 ? rInt2 : rInt1;
 
-            for (int i = 0; i < parent1.Count; i++)
-            {
-                if (i < low)
-                {
-                    child1[i] = parent1[i];
-                    child2[i] = parent2[i];
-                }
-                else if (i >= low && i <= high)
-                {
-
-                    child1[i] = parent2[i];
-                    child2[i] = parent1[i];
-                }
-                else
-                {
-
-                    child1[i] = parent1[i];
-                    child2[i] = parent2[i];
-                }
-            }
-            return new Tuple<BitArray, BitArray>(child1, child2);
-        }
-        static Tuple<BitArray, BitArray> uniCut(BitArray parent1, BitArray parent2, Random rng)
-        {
-            BitArray child1 = new BitArray(parent1.Count);
-            BitArray child2 = new BitArray(parent1.Count);
-
-            for (int i = 0; i < parent1.Count; i++)
-            {
-                if (randomBool(rng))
-                {
-                    child1[i] = parent1[i];
-                    child2[i] = parent2[i];
-                }
-                else
-                {
-                    child1[i] = parent2[i];
-                    child2[i] = parent1[i];
-                }
-            }
-            return new Tuple<BitArray, BitArray>(child1, child2);
-        }
 
 
         static bool randomBool(Random rng)
@@ -126,52 +86,30 @@ namespace EA
             return rng.NextDouble() > 0.5;
         }
 
-        static double Fun1(BitArray genotype)
-        {
-
-            double fitness = 0;
-            for (int i = 0; i < genotype.Count; i++)
-            {
-                if (genotype[i]) fitness++;
-            }
-            return fitness;
-        }
-        static double Fun2(BitArray genotype)
-        {
-
-            double fitness = 0;
-            for (int i = 0; i < genotype.Count; i++)
-            {
-                if (genotype[i]) fitness += i + 1;
-            }
-            return fitness;
-        }
-        static double Fun3(BitArray genotype)
-        {
-            double fitness = 0;
-            for (int i = 0; i < genotype.Count; i = i + 4)
-            {
-                fitness += BlockCalc(genotype[i], genotype[i + 1], genotype[i + 2], genotype[i + 3], 1);
-            }
-            return fitness;
-        }
-        static double Fun4(BitArray genotype)
-        {
-            double fitness = 0;
-            for (int i = 0; i < genotype.Count; i = i + 4)
-            {
-                fitness += BlockCalc(genotype[i], genotype[i + 1], genotype[i + 2], genotype[i + 3], 2.5);
-            }
-            return fitness;
-        }
-        static double BlockCalc(bool i1, bool i2, bool i3, bool i4, double d)
+        public static double BlockCalc(bool i1, bool i2, bool i3, bool i4, double d)
         {
             int cox = (i1 ? 1 : 0) + (i2 ? 1 : 0) + (i3 ? 1 : 0) + (i4 ? 1 : 0);
             if (cox == 4) return 4;
             else return (4 - d - ((4 - d) / 3) * cox);
         }
 
+        static Dictionary<int, int> createdMapping(int k, Random rng)
+        {
+            Dictionary<int, int> mapping = new Dictionary<int, int>();
+            List<int> indices = new List<int>();
 
+            for (int i = 0; i < k; i++)
+            {
+                indices.Add(i);
+            }
+            List<int> scrambledIndices = indices.ToList().OrderBy(a => rng.Next()).ToList();
+
+            foreach (int index in indices)
+            {
+                mapping[index] = scrambledIndices[index];
+            }
+            return mapping;
+        }
 
 
     }
