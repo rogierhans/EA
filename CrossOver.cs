@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace EA
 {
-    class CrossOver
+    public class CrossOver
     {
         public virtual Tuple<BitArray, BitArray> Cut(BitArray parent1, BitArray parent2, Random rng) { return null;}
     }
 
-    class TwoPoint : CrossOver {
+    public class TwoPoint : CrossOver {
 
         public override Tuple<BitArray, BitArray> Cut(BitArray parent1, BitArray parent2, Random rng) {
 
@@ -47,8 +47,12 @@ namespace EA
             return new Tuple<BitArray, BitArray>(child1, child2);
 
         }
+        public override string ToString()
+        {
+            return "2-point crossover(2X)";
+        }
     }
-    class UniPoint : CrossOver
+    public class UniPoint : CrossOver
     {
 
         public override Tuple<BitArray, BitArray> Cut(BitArray parent1, BitArray parent2, Random rng)
@@ -72,6 +76,16 @@ namespace EA
             }
             return new Tuple<BitArray, BitArray>(child1, child2);
 
+        }
+        bool randomBool(Random rng)
+        {
+
+            return rng.NextDouble() > 0.5;
+        }
+
+        public override string ToString()
+        {
+            return "uniform crossover (UX)";
         }
     }
 }
