@@ -49,7 +49,7 @@ namespace EA
         }
         public override string ToString()
         {
-            return "2-point crossover(2X)";
+            return "2X";
         }
     }
     public class UniPoint : CrossOver
@@ -85,7 +85,7 @@ namespace EA
 
         public override string ToString()
         {
-            return "uniform crossover (UX)";
+            return "UX";
         }
     }
 }

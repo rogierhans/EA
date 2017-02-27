@@ -4,6 +4,7 @@ using System.Collections;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace EA
 {
@@ -11,12 +12,21 @@ namespace EA
     {
         static void Main(string[] args)
         {
+
+            //List<int> tegenVoorbeeld = new List<int>();
+ 
+
+
+
+
+
+
+
+
             Random rng = new Random();
-            Console.WriteLine(rng.ToString());
 
             Dictionary<int, int> mapping = createdMapping(100, rng);
 
-            Console.ReadLine();
             //List<BitArray> offSpring = createOffspring(pop,Fun1);
             //pop.ForEach(x => print(x));
             //Console.WriteLine("scrabmebemllb");
@@ -30,29 +40,14 @@ namespace EA
             Function f6 = new Function6(mapping);
             CrossOver UX = new UniPoint();
             CrossOver TX = new TwoPoint();
-            foreach (Function f in new Function[] { f1, f2, f3, f4, f5, f6 })
-                foreach (CrossOver cs in new CrossOver[] { UX, TX })
-                {
-                    Population pop = new Population(100, rng);
-                    int maxruns = 100;
-                    int run = 0;
-                    bool converged = false;
-                    while (!converged)
-                    {
-                        pop.createOffspring(rng, f, cs);
-                        pop.print();
-                        run++;
-                        converged = pop.convergecheck(run,maxruns);
-                    }
-                    Console.WriteLine("Function {0} with Crossover {1}", f, cs);
-                    Console.ReadLine();
-                }
 
-
+            Table niels = new Table(f1);
+            niels.ExportCSV();
         }
 
 
         //asssume parents have smae lnegeht else fukc youself
+        //Is rpopven corrtly dont dublechek
         static Dictionary<int, int> createdMapping(int k, Random rng)
         {
             Dictionary<int, int> mapping = new Dictionary<int, int>();
@@ -121,10 +116,10 @@ namespace EA
             pop = pop.OrderByDescending(x => f.Evaluate(x.Bits)).Take(popSize).ToList();
 
 
-            //dit is voor mijzelf dit is inefficient
-            double weightPopulation = 0;
-            pop.ForEach(x => weightPopulation += f.Evaluate(x.Bits));
-            Console.WriteLine(weightPopulation);
+            ////dit is voor mijzelf dit is inefficient
+            //double weightPopulation = 0;
+            //pop.ForEach(x => weightPopulation += f.Evaluate(x.Bits));
+            //Console.WriteLine(weightPopulation);
         }
         public void print()
         {
@@ -138,36 +133,41 @@ namespace EA
             pop = pop.OrderBy(a => rng.Next()).ToList();
         }
 
-        internal bool convergecheck(int run, int maxruns)
+        internal bool convergecheck()
         {
-            //Als onder bepaalde grens, check voor echte convergence, anders check of de populatie uberhaupt nog geupdatete wordt
-            if (run <= maxruns)
+            bool same = true;
+            int i = 1;
+            while (same && i < pop.Count())
             {
-                bool same = true;
-                int i = 1;
-                while (same && i < pop.Count())
-                {
-                    same = sameGeno(pop[0], pop[i]);
-                    i++;
-                }
-                return same;
-            } else
-            {
-                Console.WriteLine("\n LOL NIELS IK CONVERGE HELEMAAL NIET");
-                return true;
+                same = sameGeno(pop[0], pop[i]);
+                i++;
             }
+            return same;
+
         }
 
         private bool sameGeno(GenoType genoType1, GenoType genoType2)
         {
             bool equal = true;
             int i = 0;
-            while(equal && i < genoType1.Bits.Count)
+            while (equal && i < genoType1.Bits.Count)
             {
                 equal = genoType1.Bits[i] == genoType2.Bits[i];
                 i++;
             }
             return equal;
+        }
+
+        internal bool checkGlobalOptimum(Function f)
+        {
+            foreach (GenoType genoType in pop) {
+                bool allOnes = true;
+                foreach (bool bit in genoType.Bits) {
+                    allOnes = allOnes && bit;
+                }
+                if (allOnes) return true;
+            }
+            return false;
         }
     }
     public class GenoType
