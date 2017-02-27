@@ -34,11 +34,15 @@ namespace EA
                 foreach (CrossOver cs in new CrossOver[] { UX, TX })
                 {
                     Population pop = new Population(100, rng);
-                    int runs = 100;
-                    while (runs-- > 0)
+                    int maxruns = 100;
+                    int run = 0;
+                    bool converged = false;
+                    while (!converged)
                     {
                         pop.createOffspring(rng, f, cs);
                         pop.print();
+                        run++;
+                        converged = pop.convergecheck(run,maxruns);
                     }
                     Console.WriteLine("Function {0} with Crossover {1}", f, cs);
                     Console.ReadLine();
@@ -132,6 +136,38 @@ namespace EA
         public void scramble()
         {
             pop = pop.OrderBy(a => rng.Next()).ToList();
+        }
+
+        internal bool convergecheck(int run, int maxruns)
+        {
+            //Als onder bepaalde grens, check voor echte convergence, anders check of de populatie uberhaupt nog geupdatete wordt
+            if (run <= maxruns)
+            {
+                bool same = true;
+                int i = 1;
+                while (same && i < pop.Count())
+                {
+                    same = sameGeno(pop[0], pop[i]);
+                    i++;
+                }
+                return same;
+            } else
+            {
+                Console.WriteLine("\n LOL NIELS IK CONVERGE HELEMAAL NIET");
+                return true;
+            }
+        }
+
+        private bool sameGeno(GenoType genoType1, GenoType genoType2)
+        {
+            bool equal = true;
+            int i = 0;
+            while(equal && i < genoType1.Bits.Count)
+            {
+                equal = genoType1.Bits[i] == genoType2.Bits[i];
+                i++;
+            }
+            return equal;
         }
     }
     public class GenoType
