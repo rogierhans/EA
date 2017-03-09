@@ -41,8 +41,11 @@ namespace EA
             CrossOver UX = new UniPoint();
             CrossOver TX = new TwoPoint();
 
-            Table niels = new Table(f1);
-            niels.ExportCSV();
+            foreach (Function f in  new List < Function > { f1, f2, f3, f4, f5, f6 })
+            {
+                Table niels = new Table(f);
+                niels.ExportCSV();
+            }
         }
 
 

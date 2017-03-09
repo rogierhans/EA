@@ -35,7 +35,7 @@ namespace EA
         }
         public override string ToString()
         {
-            return "Uniformly Scaled Counting Ones";
+            return "USCO";
         }
     }
     public class Function2 : Function
@@ -53,7 +53,7 @@ namespace EA
         }
         public override string ToString()
         {
-            return "Linearly Scaled Counting Ones";
+            return "LSCO";
         }
     }
     public class Function3 : Function
@@ -70,7 +70,7 @@ namespace EA
         }
         public override string ToString()
         {
-            return "Deceptive Trap (tightly linked)";
+            return "DTT";
         }
     }
 
@@ -90,7 +90,7 @@ namespace EA
         }
         public override string ToString()
         {
-            return "Non-deceptive Trap (tightly linked)";
+            return "NDTT";
         }
     }
 
@@ -110,7 +110,7 @@ namespace EA
         }
         public override string ToString()
         {
-            return "Deceptive Trap(randomly linked)";
+            return "DTR";
         }
     }
 
@@ -129,7 +129,7 @@ namespace EA
         }
         public override string ToString()
         {
-            return "Non-deceptive Trap(randomly linked)";
+            return "NDTR";
         }
     }
 

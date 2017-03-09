@@ -20,6 +20,7 @@ namespace EA
             foreach (CrossOver cs in new CrossOver[] { TX,UX })
                 foreach (int popSize in new int[] { 50,100,250,500})
                 {
+                    Console.WriteLine(f + cs.ToString() + " " + popSize);
                     Row row = new Row(f,cs,popSize);
                     row.run();
                     rows.Add(row);
@@ -33,7 +34,7 @@ namespace EA
                 allLines.Add(row.convertToRealRow());
 
             }
-            File.WriteAllLines("C:\\Users\\niels\\Desktop\\Niels\\Table.csv", allLines.ToArray());
+            File.WriteAllLines("C:\\Users\\niels\\Desktop\\Niels\\Table"+F.ToString()+".csv", allLines.ToArray());
         }
 
     }
@@ -129,7 +130,7 @@ namespace EA
         public string meanAndStdev(List<int> list) {
             double Mean = mean(list);
             double Std = stdev(list, Mean);
-            return Mean + "(" + Std+ ")";
+            return Math.Round(Mean, 3) + "(" + Math.Round(Std, 3)+ ")";
         }
 
         public double mean(List<int> list)
